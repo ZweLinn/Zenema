@@ -1,11 +1,30 @@
 import type { Action, ThunkAction } from "@reduxjs/toolkit";
 import { combineSlices, configureStore } from "@reduxjs/toolkit";
-import { counterSlice } from "./features/counter/counterSlice";
-import { quotesApiSlice } from "./features/quotes/quotesApiSlice";
-
+import { topRatedMovieApiSlice } from "./features/topRatedMovie/topRatedMovieApiSlice";
+import { movieDetailApiSlice } from "./features/movieDetail/movieDetailApiSlice";
+import { videoApiSlice } from "./features/video/videoApiSlice";
+import { creditsApiSlice } from "./features/credits/creditsApiSlice";
+import { creditsDetailApiSlice } from "./features/credits/creditsDetailApiSlice";
+import { creditsExternalIdApiSlice } from "./features/credits/creditExternalIdApiSlice";
+import { creditsMovieApiSlice } from "./features/credits/creditsMovieApiSlice";
+import { creditsSeriesApiSlice } from "./features/credits/creditsSeriesApiSlice";
+import { creditsImageApiSlice } from "./features/credits/creditsImageApiSlice";
+import { serieDetailApiSlice } from "./features/serieDetail/serieDetailApiSlice";
+import { serieVideoApiSlice } from "./features/video/serieVideoApiSlice";
 // `combineSlices` automatically combines the reducers using
 // their `reducerPath`s, therefore we no longer need to call `combineReducers`.
-const rootReducer = combineSlices(counterSlice, quotesApiSlice);
+const rootReducer = combineSlices(
+  topRatedMovieApiSlice,
+  movieDetailApiSlice,
+  videoApiSlice,
+  serieVideoApiSlice,
+  creditsApiSlice,
+  creditsDetailApiSlice,
+  creditsExternalIdApiSlice,
+  creditsMovieApiSlice,
+  creditsSeriesApiSlice,
+  creditsImageApiSlice,
+  serieDetailApiSlice);
 // Infer the `RootState` type from the root reducer
 export type RootState = ReturnType<typeof rootReducer>;
 
@@ -19,7 +38,17 @@ export const makeStore = () => {
     // Adding the api middleware enables caching, invalidation, polling,
     // and other useful features of `rtk-query`.
     middleware: (getDefaultMiddleware) => {
-      return getDefaultMiddleware().concat(quotesApiSlice.middleware);
+      return getDefaultMiddleware().concat(topRatedMovieApiSlice.middleware)
+        .concat(movieDetailApiSlice.middleware)
+        .concat(videoApiSlice.middleware)
+        .concat(serieVideoApiSlice.middleware)
+        .concat(creditsApiSlice.middleware)
+        .concat(creditsDetailApiSlice.middleware)
+        .concat(creditsExternalIdApiSlice.middleware)
+        .concat(creditsMovieApiSlice.middleware)
+        .concat(creditsSeriesApiSlice.middleware)
+        .concat(creditsImageApiSlice.middleware)
+        .concat(serieDetailApiSlice.middleware);
     },
   });
 };
