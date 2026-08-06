@@ -2,27 +2,59 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 import styles from "../styles/logo.module.css";
 
 const NAV_LINKS = [
+	{ id: "home", href: "/", label: "Home" },
 	{
-		href: "/",
-		label: "Home",
-	},
-	{
-		label: "Movie",
+		id: "movies",
+		label: "Movies",
 		children: [
-			{ href: "/topRatedMovie", label: "TopRated" },
-			{ href: "#", label: "Link 2" },
+			{ id: "movies-top-rated", href: "/topRatedMovie", label: "Top Rated" },
+			{ id: "movies-now-playing", href: "#", label: "Now Playing" },
+			{ id: "movies-upcoming", href: "#", label: "Upcoming" },
+			{ id: "movies-popular", href: "#", label: "Popular" },
 		],
 	},
+	{
+		id: "tv-shows",
+		label: "TV Shows",
+		children: [
+			{ id: "tv-top-rated", href: "#", label: "Top Rated" },
+			{ id: "tv-on-air", href: "#", label: "On Air" },
+			{ id: "tv-popular", href: "#", label: "Popular" },
+		],
+	},
+	{
+		id: "genres",
+		label: "Genres",
+		children: [
+			{ id: "genre-action", href: "#", label: "Action" },
+			{ id: "genre-comedy", href: "#", label: "Comedy" },
+			{ id: "genre-drama", href: "#", label: "Drama" },
+			{ id: "genre-horror", href: "#", label: "Horror" },
+			{ id: "genre-sci-fi", href: "#", label: "Sci-Fi" },
+		],
+	},
+	{ id: "trending", href: "#", label: "Trending" },
 ] as const;
 
 export const Nav = () => {
 	const pathname = usePathname();
+	const [openDesktop, setOpenDesktop] = useState<number | null>(null);
+	const [openMobile, setOpenMobile] = useState<number | null>(null);
+
+	const handleDesktopToggle = (index: number) => {
+		setOpenDesktop((prev) => (prev === index ? null : index));
+	};
+
+	const handleMobileToggle = (index: number) => {
+		setOpenMobile((prev) => (prev === index ? null : index));
+	};
 
 	return (
-		<nav className="navbar bg-base-100 shadow-sm z-10 text-white">
+		<nav className="navbar bg-base-100 shadow-sm z-50 text-white sticky top-0">
 			{/* ── Left: logo + mobile hamburger ── */}
 			<div className="navbar-start">
 				{/* Mobile dropdown — visible below lg breakpoint */}
@@ -45,16 +77,22 @@ export const Nav = () => {
 					</label>
 					<ul
 						tabIndex={0}
-						className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
+						className="menu menu-sm dropdown-content bg-base-200 rounded-box z-[1] mt-3 w-56 p-2 shadow-xl border border-base-300"
 					>
-						{NAV_LINKS.map((link) =>
+						{NAV_LINKS.map((link, i) =>
 							"children" in link ? (
-								<li key={link.label}>
-									<details>
+								<li key={link.id}>
+									<details
+										open={openMobile === i}
+										onClick={(e) => {
+											e.preventDefault();
+											handleMobileToggle(i);
+										}}
+									>
 										<summary>{link.label}</summary>
-										<ul className="p-2">
+										<ul>
 											{link.children.map((child) => (
-												<li key={child.href}>
+												<li key={child.id}>
 													<Link
 														href={child.href}
 														className={pathname === child.href ? "active" : ""}
@@ -67,7 +105,7 @@ export const Nav = () => {
 									</details>
 								</li>
 							) : (
-								<li key={link.href}>
+								<li key={link.id}>
 									<Link
 										href={link.href}
 										className={pathname === link.href ? "active" : ""}
@@ -88,15 +126,21 @@ export const Nav = () => {
 
 			{/* ── Center: desktop horizontal menu ── */}
 			<div className="navbar-center hidden lg:flex">
-				<ul className="menu menu-horizontal px-1">
-					{NAV_LINKS.map((link) =>
+				<ul className="menu menu-horizontal px-1 gap-1">
+					{NAV_LINKS.map((link, i) =>
 						"children" in link ? (
-							<li key={link.label}>
-								<details>
+							<li key={link.id}>
+								<details
+									open={openDesktop === i}
+									onClick={(e) => {
+										e.preventDefault();
+										handleDesktopToggle(i);
+									}}
+								>
 									<summary>{link.label}</summary>
-									<ul className="bg-base-100 rounded-t-none p-2">
+									<ul className="bg-base-200 rounded-box z-[1] p-2 shadow-xl border border-base-300 min-w-40">
 										{link.children.map((child) => (
-											<li key={child.href}>
+											<li key={child.id}>
 												<Link
 													href={child.href}
 													className={pathname === child.href ? "active" : ""}
@@ -109,7 +153,7 @@ export const Nav = () => {
 								</details>
 							</li>
 						) : (
-							<li key={link.href}>
+							<li key={link.id}>
 								<Link
 									href={link.href}
 									className={pathname === link.href ? "active" : ""}
@@ -127,7 +171,7 @@ export const Nav = () => {
 				<input
 					type="text"
 					placeholder="Search"
-					className="input input-bordered w-24 md:w-auto"
+					className="input input-bordered input-sm w-24 md:w-auto"
 				/>
 				<div className="dropdown dropdown-end">
 					<div
@@ -145,19 +189,20 @@ export const Nav = () => {
 
 					<ul
 						tabIndex={0}
-						className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
+						className="menu menu-sm dropdown-content bg-base-200 rounded-box z-[1] mt-3 w-52 p-2 shadow-xl border border-base-300"
 					>
 						<li>
-							<a className="justify-between">
+							<button type="button" className="justify-between">
 								Profile
-								<span className="badge">New</span>
-							</a>
+								<span className="badge badge-sm">New</span>
+							</button>
 						</li>
 						<li>
-							<a>Settings</a>
+							<button type="button">Settings</button>
 						</li>
+						<li className="menu-title">Account</li>
 						<li>
-							<a>Logout</a>
+							<button type="button">Logout</button>
 						</li>
 					</ul>
 				</div>
