@@ -11,10 +11,9 @@ import SerieDetail from "@/type/serieDetail/SerieDetail";
 
 export default function SerieHeroSection({ SerieDetail , videoData }: { SerieDetail: SerieDetail ; videoData: VideoResults[] }) {
     const [activeVideoKey, setActiveVideoKey] = useState<null | string>(null);
-    
-   console.log('videoData', videoData);
-   
-    
+
+
+
     const handleVideoClick = () => {
        {
         videoData.map((video) => {

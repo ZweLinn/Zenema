@@ -17,7 +17,6 @@ export default function SerieDetailPage() {
 
     return (
         <div>
-            <h1>Serie Detail {id}</h1>
             {
                 serieData && videoData && (<SerieHeroSection SerieDetail={serieData as SerieDetail} videoData={videoData.results as VideoResults[]} />)
             }
