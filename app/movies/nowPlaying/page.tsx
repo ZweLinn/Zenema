@@ -1,18 +1,19 @@
 'use client';
-import { useGetTopRatedMoviesQuery } from "@/lib/features/topRatedMovie/topRatedMovieApiSlice";
-import Pagination from "../components/Pagination";
+import { useGetNowPlayingMoviesQuery } from "@/lib/features/movie/nowPlayingMovieApiSlice";
+import NowPlayingMovieLists from "./nowPlayingMovieLists";
+import NowPlaying from "@/type/movies/nowPlaying/nowPlaying";
+import Pagination from "../../components/Pagination";
 import { useEffect, useState } from "react";
-import LoadingEffect from "../components/Loading";
-import TopRatedMovieLists from "./topRateMovieLists";
-import TopRated from "@/type/topRatedMovie/topRated";
-import ErrorEffect from "../components/Error";
+import LoadingEffect from "../../components/Loading";
+import ErrorEffect from "../../components/Error";
 
 
 export default function TopRatedMoviePage() {
 
     const [fetchPage, setFetchPage] = useState(1);
-    const { data: TopRatedMovies, isLoading, isError } = useGetTopRatedMoviesQuery(fetchPage);
+    const { data: NowPlayingMovies, isLoading, isError } = useGetNowPlayingMoviesQuery(fetchPage);
 
+    console.log("NowPlayingMovies", NowPlayingMovies);
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }, [fetchPage]);
@@ -24,7 +25,7 @@ export default function TopRatedMoviePage() {
         <div>
             <h1 className="text-2xl font-bold text-center text-mainText my-6">Top Rated Movies</h1>
             <div className="justify-center flex flex-col items-center">
-                {TopRatedMovies && <TopRatedMovieLists topRatedMovie={TopRatedMovies as TopRated} />}
+                {NowPlayingMovies && <NowPlayingMovieLists nowPlaying={NowPlayingMovies as NowPlaying} />}
             </div>
 
             <div className="flex justify-center mt-10">

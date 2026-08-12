@@ -1,8 +1,8 @@
 "use client";
 
-import { useGetTopRatedMoviesQuery } from "@/lib/features/topRatedMovie/topRatedMovieApiSlice";
-import type TopRated from "@/type/topRatedMovie/topRated";
-import type TopRatedMovieResult from "@/type/topRatedMovie/topRatedResult";
+import { useGetTopRatedMoviesQuery } from "@/lib/features/movie/topRatedMovieApiSlice";
+import type TopRated from "@/type/movies/topRatedMovie/topRated";
+import type TopRatedMovieResult from "@/type/movies/topRatedMovie/topRatedResult";
 import { ImgPath } from "@/util/imgPath";
 import Image from "next/image";
 import { useRouter } from "next/navigation";

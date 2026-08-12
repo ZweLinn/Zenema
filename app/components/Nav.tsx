@@ -11,10 +11,10 @@ const NAV_LINKS = [
 		id: "movies",
 		label: "Movies",
 		children: [
-			{ id: "movies-top-rated", href: "/topRatedMovie", label: "Top Rated" },
-			{ id: "movies-now-playing", href: "#", label: "Now Playing" },
-			{ id: "movies-upcoming", href: "#", label: "Upcoming" },
-			{ id: "movies-popular", href: "#", label: "Popular" },
+			{ id: "movies-top-rated", href: "/movies/topRated", label: "Top Rated" },
+			{ id: "movies-now-playing", href: "/movies/nowPlaying", label: "Now Playing" },
+			{ id: "movies-upcoming", href: "/movies/upcoming", label: "Upcoming" },
+			{ id: "movies-popular", href: "/movies/popular", label: "Popular" },
 		],
 	},
 	{
