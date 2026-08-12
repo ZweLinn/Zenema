@@ -8,12 +8,12 @@ import { useRouter } from "next/navigation";
 export default function MovieOverviewSection({ movieDetail , crew }: { movieDetail: MovieDetails ; crew : Crew[] } ) {
     const router = useRouter();
     const director = crew.find((person) => person.job === 'Director' && person.department === 'Directing');
-    
+
 
     const handleClick = (id: number | undefined) => {
-        router.push(`/creditDetail/${id}`);
+        router.push(`/credit/${id}`);
     }
-    
+
     return (
         <div className="my-5">
             <h1 className="text-2xl font-bold text-mainText text-center">Overview</h1>

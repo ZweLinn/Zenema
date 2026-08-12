@@ -15,7 +15,7 @@ export default function HomePage() {
 	const { data, isLoading, isError } = useGetTopRatedMoviesQuery(1);
 
 	const handleMovieClick = (id: number) => {
-		router.push(`/movieDetail/${id}`);
+		router.push(`/movie/${id}`);
 	};
 
 	return (

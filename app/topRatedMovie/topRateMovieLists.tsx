@@ -9,7 +9,7 @@ export default function TopRatedMovieLists({ topRatedMovie }: { topRatedMovie: T
     const router = useRouter();
 
     const handleClick = (id: number) => {
-        router.push(`/movieDetail/${id}`);
+        router.push(`/movie/${id}`);
     }
 
     return (
