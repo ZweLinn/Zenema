@@ -15,11 +15,11 @@ import Cast from "@/type/credits/cast";
 export default function MovieDetail() {
     const { id } = useParams();
     const { data: movieDetail, isError, isLoading } = useGetMovieDetailQuery(id);
-    const { data: videoData, isError: videoIsError, isLoading: videoIsLoading } = useGetVideoQuery(id);
-    const { data: creditsData, isError: creditsIsError, isLoading: creditsIsLoading } = useGetCreditsQuery(id);
+    const { data: videoData, isLoading: videoIsLoading } = useGetVideoQuery(id);
+    const { data: creditsData, isLoading: creditsIsLoading } = useGetCreditsQuery(id);
 
 
-    if (isLoading && videoIsLoading && creditsIsLoading) return (<LoadingEffect />);
+    if (isLoading || videoIsLoading || creditsIsLoading) return (<LoadingEffect />);
     if (isError) return (<ErrorEffect message="Error! : Something went wrong" />);
     return (
         <div>
