@@ -13,8 +13,10 @@ The **canonical "movie box"** lives in `app/home/page.tsx` ("Featured Movies") a
 - `app/home/page.tsx` — Featured Movies (first 10 top-rated)
 - `app/movies/topRated/topRateMovieLists.tsx`
 - `app/movies/nowPlaying/nowPlayingMovieLists.tsx`
+- `app/credit/[id]/creditMovie.tsx` — person page "Movies" tab
+- `app/credit/[id]/creditSerie.tsx` — person page "TV Shows" tab
 
-> All three movie grids use the exact same box markup — treat them as one source of truth.
+> All of these grids use the exact same box markup — treat them as one source of truth.
 
 ---
 
