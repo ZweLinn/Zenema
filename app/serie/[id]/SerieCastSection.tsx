@@ -4,7 +4,7 @@ import { ImgPath } from "@/util/imgPath";
 import { useRouter } from "next/navigation";
 
 
-export default function CastSection({ castData }: { castData: Cast[] }) {
+export default function SerieCastSection({ castData }: { castData: Cast[] }) {
     const router = useRouter();
     const handleClick = (id: number) => {
         router.push(`/credit/${id}`);

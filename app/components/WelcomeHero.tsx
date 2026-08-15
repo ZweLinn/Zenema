@@ -1,4 +1,4 @@
-import Link from "next/link";
+
 import styles from "../styles/logo.module.css";
 
 export default function WelcomeHero() {
@@ -21,14 +21,6 @@ export default function WelcomeHero() {
 					Discover top-rated movies, explore detailed insights, and immerse
 					yourself in the world of film — all in one place.
 				</p>
-				<Link href="/topRatedMovie">
-					<button
-						type="button"
-						className="btn btn-outline btn-lg mt-8 text-mainText border-mainText hover:bg-mainText hover:text-base-300 transition-all duration-300 px-8"
-					>
-						Browse Movies
-					</button>
-				</Link>
 			</div>
 		</section>
 	);

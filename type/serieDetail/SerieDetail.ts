@@ -1,7 +1,7 @@
 import Genre from "../movieDetail/Genre";
 
 export default interface SerieDetail {
-    aduult: boolean;
+    adult: boolean;
     backdrop_path: string | null;
     created_by : any[];
     episode_run_time: number[];

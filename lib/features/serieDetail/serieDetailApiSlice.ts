@@ -17,9 +17,13 @@ export const serieDetailApiSlice = createApi({
             query: (id) => `/3/tv/${id}`,
             providesTags: ["SerieDetailApi"],
         }),
+        getSerieCredits: build.query({
+            query: (id) => `/3/tv/${id}/credits`,
+            providesTags: ["SerieDetailApi"],
+        }),
     }),
 })
 
 
 
-export const { useGetSerieDetailQuery } =  serieDetailApiSlice;
+export const { useGetSerieDetailQuery, useGetSerieCreditsQuery } = serieDetailApiSlice;
