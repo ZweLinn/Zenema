@@ -1,6 +1,6 @@
 'use client';
-import TopRated from "@/type/movies/topRatedMovie/topRated";
-import TopRatedMovieResult from "@/type/movies/topRatedMovie/topRatedResult";
+import TopRated from "@/type/movies/topRated/topRated";
+import TopRatedMovieResult from "@/type/movies/topRated/topRatedResult";
 import { ImgPath } from "@/util/imgPath";
 import Image from "next/image";
 import { useRouter } from "next/navigation";

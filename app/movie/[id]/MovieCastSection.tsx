@@ -1,7 +1,6 @@
 'use client'
 import Cast from "@/type/credits/cast";
 import { ImgPath } from "@/util/imgPath";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 

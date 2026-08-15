@@ -30,11 +30,11 @@ export default function MovieDetail() {
             {
                 movieDetail && creditsData && <MovieOverviewSection movieDetail={movieDetail} crew={creditsData?.crew as Crew[]} />
             }
-            
+
             {
                 creditsData && <CastSection castData={creditsData.cast as Cast[]} />
             }
-         
+
         </div>
     );
 }

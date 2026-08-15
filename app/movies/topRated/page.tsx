@@ -4,7 +4,7 @@ import Pagination from "../../components/Pagination";
 import { useEffect, useState } from "react";
 import LoadingEffect from "../../components/Loading";
 import TopRatedMovieLists from "./topRateMovieLists";
-import TopRated from "@/type/movies/topRatedMovie/topRated";
+import TopRated from "@/type/movies/topRated/topRated";
 import ErrorEffect from "../../components/Error";
 
 
