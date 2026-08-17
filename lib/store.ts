@@ -2,6 +2,7 @@ import type { Action, ThunkAction } from "@reduxjs/toolkit";
 import { combineSlices, configureStore } from "@reduxjs/toolkit";
 import { topRatedMovieApiSlice } from "./features/movie/topRatedMovieApiSlice";
 import { nowPlayingMovieApiSlice } from "./features/movie/nowPlayingMovieApiSlice";
+import { upComingMovieApiSlice } from "./features/movie/upComingMovieApiSlice";
 import { movieDetailApiSlice } from "./features/movieDetail/movieDetailApiSlice";
 import { videoApiSlice } from "./features/video/videoApiSlice";
 import { creditsApiSlice } from "./features/credits/creditsApiSlice";
@@ -12,11 +13,14 @@ import { creditsSeriesApiSlice } from "./features/credits/creditsSeriesApiSlice"
 import { creditsImageApiSlice } from "./features/credits/creditsImageApiSlice";
 import { serieDetailApiSlice } from "./features/serieDetail/serieDetailApiSlice";
 import { serieVideoApiSlice } from "./features/video/serieVideoApiSlice";
+import { popularMovieApiSlice } from "./features/movie/popularMovieApiSlice";
 // `combineSlices` automatically combines the reducers using
 // their `reducerPath`s, therefore we no longer need to call `combineReducers`.
 const rootReducer = combineSlices(
     topRatedMovieApiSlice,
     nowPlayingMovieApiSlice,
+    upComingMovieApiSlice,
+    popularMovieApiSlice,
     movieDetailApiSlice,
     videoApiSlice,
     serieVideoApiSlice,
@@ -44,6 +48,8 @@ export const makeStore = () => {
             return getDefaultMiddleware()
                 .concat(topRatedMovieApiSlice.middleware)
                 .concat(nowPlayingMovieApiSlice.middleware)
+                .concat(upComingMovieApiSlice.middleware)
+                .concat(popularMovieApiSlice.middleware)
                 .concat(movieDetailApiSlice.middleware)
                 .concat(videoApiSlice.middleware)
                 .concat(serieVideoApiSlice.middleware)
