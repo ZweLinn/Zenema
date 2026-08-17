@@ -25,7 +25,7 @@ export default function PopularMoviePage() {
     return (
         <div>
             <h1 className="text-2xl font-bold text-center text-mainText my-6">
-                Upcoming Movies
+                Popular Movies
             </h1>
             <div className="justify-center flex flex-col items-center">
                 {PopularMovies && (
