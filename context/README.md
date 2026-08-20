@@ -19,7 +19,7 @@ A movie & TV series browsing web app built with **Next.js (App Router) + Redux T
 
 | Command | Purpose |
 | --- | --- |
-| `pnpm dev` | Dev server on http://localhost:3000 |
+| `pnpm dev` | Dev server on <http://localhost:3000> |
 | `pnpm type` | **Typecheck only** (`tsc --noEmit`) — fastest validation |
 | `pnpm build` | Production build (`next build`) |
 | `pnpm start` | Serve production build |
@@ -54,6 +54,10 @@ Zenema/
 │   ├── movies/
 │   │   ├── topRated/           # + topRateMovieLists.tsx (movie card grid) + loading.tsx
 │   │   └── nowPlaying/         # + nowPlayingMovieLists.tsx (movie card grid) + loading.tsx
+│   ├── tv/
+│   │   ├── topRated/           # + loading.tsx (shares app/components/TvLists.tsx grid)
+│   │   ├── popular/            # + loading.tsx
+│   │   └── onAir/              # + loading.tsx
 │   ├── movie/[id]/             # Movie detail: page, MovieHeroSection, MovieOverviewSection, MovieCastSection, loading.tsx
 │   ├── serie/[id]/             # Serie detail: page, SerieHeroSection, SerieOverviewSection, SerieCastSection, loading.tsx
 │   └── credit/[id]/            # Person detail: creditOverview, creditMovie, creditSerie, creditPhoto + page with tabs
@@ -64,8 +68,9 @@ Zenema/
 │       ├── movie/              # topRatedMovieApiSlice, nowPlayingMovieApiSlice
 │       ├── movieDetail/        # movieDetailApiSlice
 │       ├── serieDetail/        # serieDetailApiSlice (detail + getSerieCredits)
+│       ├── tv/                 # tvListApiSlice (top_rated + popular + on_the_air)
 │       ├── credits/            # creditsApiSlice, creditsDetailApiSlice, creditsMovieApiSlice, creditsSeriesApiSlice, creditExternalIdApiSlice, creditsImageApiSlice
-│       └── video/              # videoApiSlice (movie), serieVideoApiSlice
+│ └── video/              # videoApiSlice (movie), serieVideoApiSlice
 ├── type/                       # TS types mirroring TMDB responses (per-domain)
 ├── util/
 │   ├── imgPath.ts              # `ImgPath = "https://image.tmdb.org/t/p/w780"`
@@ -88,9 +93,12 @@ Zenema/
 | `/movies/nowPlaying` | `app/movies/nowPlaying/` | Now playing movies, paginated |
 | `/movie/[id]` | `app/movie/[id]/` | Movie detail: hero + overview + cast |
 | `/serie/[id]` | `app/serie/[id]/` | Serie detail: hero + overview + cast |
+| `/tv/topRated` | `app/tv/topRated/` | Top rated TV shows, paginated |
+| `/tv/popular` | `app/tv/popular/` | Popular TV shows, paginated |
+| `/tv/onAir` | `app/tv/onAir/` | On-air TV shows, paginated |
 | `/credit/[id]` | `app/credit/[id]/` | Person page with Movies / TV Shows / Photos tabs |
 
-> Nav menu items point to entries → many are placeholders (`#`): TV Shows, Genres, Trending, Upcoming, Popular. `Search` input and the avatar dropdown in the Nav are not functional.
+> Nav menu items point to entries → many are placeholders (`#`): Genres, Trending, Upcoming, Popular. `Search` input and the avatar dropdown in the Nav are not functional.
 
 ---
 
@@ -128,6 +136,9 @@ Zenema/
 | `creditsImageApiSlice` | `GET /3/person/{id}/images` |
 | `videoApiSlice` | `GET /3/movie/{id}/videos` |
 | `serieVideoApiSlice` | `GET /3/tv/{id}/videos` |
+| `tvListApiSlice: getTopRatedTv` | `GET /3/tv/top_rated?page={page}` |
+| `tvListApiSlice: getPopularTv` | `GET /3/tv/popular?page={page}` |
+| `tvListApiSlice: getOnTheAirTv` | `GET /3/tv/on_the_air?page={page}` |
 
 > ⚠️ `creditsSeriesApiSlice` = a **person**'s TV credits (credit page). For a **serie's cast** use `serieDetailApiSlice.getSerieCredits` (`/3/tv/{id}/credits`).
 
@@ -135,8 +146,21 @@ Zenema/
 
 ## 9. Session Work Log (most recent first)
 
-### 9.1 Serie detail page — added Overview & Cast sections ✅
+### 9.3 TV series lists — Top Rated, Popular, On Air ✅
+
+Mirrors the movie list pages (`app/movies/…`); cards follow `context/box-design.md`.
+
+- **Created** `type/tv/tvResult.ts` + `type/tv/tvList.ts` — **one shared shape** for all three endpoints (they return identical responses). `TvResult` uses the correct `genre_ids` spelling (unlike the inherited movie `genere_ids` typo) and types `poster_path`/`backdrop_path` as `string | null`.
+- **Created** `lib/features/tv/tvListApiSlice.ts` — a single multi-endpoint slice (pattern from `serieDetailApiSlice`): `getTopRatedTv` → `/3/tv/top_rated`, `getPopularTv` → `/3/tv/popular`, `getOnTheAirTv` → `/3/tv/on_the_air` (all `?page={page}`). Exports `useGetTopRatedTvQuery`, `useGetPopularTvQuery`, `useGetOnTheAirTvQuery`.
+- **Modified** `lib/store.ts` — registered `tvListApiSlice` in `combineSlices(...)` **and** the `.concat(...)` middleware list.
+- **Created** `app/components/TvLists.tsx` — one shared card grid for all three lists: whole-card `group` click → `/serie/{id}`, border on wrapper only, `group-hover:scale-105 group-hover:blur-[2px]`, gold rating badge, `h3` title from `name`. Uses the `randomavatar.com` poster fallback when `poster_path` is null (box-design §6 recommendation for new grids).
+- **Created** pages `app/tv/topRated/`, `app/tv/popular/`, `app/tv/onAir/` (each `page.tsx` + `loading.tsx`) — cloned from `app/movies/popular/page.tsx`: `fetchPage` state, smooth scroll-to-top on page change, `LoadingEffect`/`ErrorEffect`, centered `text-mainText` h1, `Pagination`.
+- **Modified** `app/components/Nav.tsx` — TV Shows dropdown hrefs `#` → `/tv/topRated`, `/tv/onAir`, `/tv/popular`.
+- **Decisions:** shared `TvList`/`TvResult` types, single multi-endpoint slice, and one shared `TvLists` grid instead of per-endpoint duplicates (the three lists are identical in shape/markup). Route naming `/tv/…` mirrors `/movies/…` (camelCase, matching the existing `/serie/[id]` and the "TV Shows" Nav label).
+- **Status:** ✅ `pnpm type` passes; `pnpm build` verified next.
+
 Mirrors the movie detail page (`app/movie/[id]/`).
+
 - **Created** `app/serie/[id]/SerieOverviewSection.tsx` — "Overview" heading, poster (`hidden md:block`), overview text, and 2-col grid: **Created By** (clickable → `/credit/{id}`, from `serieDetail.created_by`, falls back to "N/A"), Status, First Air Date, Last Air Date, Original Language, Number of Seasons, Number of Episodes.
 - **Created** `app/serie/[id]/SerieCastSection.tsx` — identical daisyUI carousel to `MovieCastSection` (cast `profile_path`/name/character, click → `/credit/{id}`, `randomavatar.com` fallback).
 - **Created** `app/serie/[id]/loading.tsx` (same as movie route's).
@@ -146,6 +170,7 @@ Mirrors the movie detail page (`app/movie/[id]/`).
 - **Status:** ✅ `pnpm type` + `pnpm build` pass.
 
 ### 9.2 Movie list card design — unified with home page
+
 - The full card pattern (structure + classes) is documented in **`context/box-design.md`**.
 - **Modified** `app/movies/topRated/topRateMovieLists.tsx` and `app/movies/nowPlaying/nowPlayingMovieLists.tsx` to match the card design in `app/home/page.tsx`:
   - Whole card = `group` with click handler on the card (not per-element)
@@ -165,7 +190,7 @@ Mirrors the movie detail page (`app/movie/[id]/`).
 - **`Credits` type reuse:** `type/credits/credits.ts` (`{ id, cast: Cast[], crew: Crew[] }`) matches both movie and TV credits responses — reuse it. Note `Cast.cast_id` is movie-only (absent in TV credits) but unused in UI, so harmless.
 - **`SerieDetail` type is loose:** many fields are `any[]` (`created_by`, `seasons`, `networks`, …). Cast to the needed shape at the usage site.
 - **Type typo inherited from TMDB mapping:** `genere_ids` is misspelled in both movie result types (`TopRatedMovieResult`, `NowPlayingResult`); fields are unused in the UI so it hasn't bitten yet.
-- **Not all Nav links work yet** (see §5). Upcoming, Popular, search, TV/genre pages, Trending are planned/unimplemented.
+- **Not all Nav links work yet** (see §5). Genres, Trending, search, and the Upcoming/Popular movie pages are planned/unimplemented (TV lists now work: `/tv/topRated`, `/tv/popular`, `/tv/onAir`).
 - `.env` exists locally (needed for runtime data). `.next/`, `.open-next/`, `.wrangler/` are gitignored build artifacts.
 - Current branch is `refactor/clean-up`; the previous README at repo root lists the older folder names `movieDetail/[id]`/`serieDetail/[id]` — the **real** folders are `app/movie/[id]` and `app/serie/[id]`.
 
@@ -173,10 +198,10 @@ Mirrors the movie detail page (`app/movie/[id]/`).
 
 ## 11. Current Repository State (as of last update)
 
-- **Branch:** `refactor/clean-up`
-- **Latest commit:** `384f963` — "Add overview and cast sections to TV series detail page" (the serie Overview + Cast work from §9.1 is **committed**).
+- **Branch:** `feature/movies`
+- **Latest commit:** `a00c761` — "Fix name".
 - **Uncommitted (working tree):**
-  - Movie card design work (§9.2): `app/movies/topRated/topRateMovieLists.tsx`, `app/movies/nowPlaying/nowPlayingMovieLists.tsx`
-  - User's own WIP/cleanup: `app/components/WelcomeHero.tsx` (removed "Browse Movies" button + unused `Link` import), `app/movies/topRated/page.tsx` (formatting only)
+  - TV series lists work (§9.3): `app/components/TvLists.tsx`, `app/tv/` (topRated, popular, onAir), `lib/features/tv/tvListApiSlice.ts`, `type/tv/`
+  - `lib/store.ts` (tvListApiSlice registration), `app/components/Nav.tsx` (TV dropdown routes)
   - `context/` — untracked: this `README.md` + `box-design.md` (movie card pattern)
-- **Validation:** last `pnpm type` and `pnpm build` both passed on this state.
+- **Validation:** `pnpm type` passes on this state; `pnpm build` to be re-run.

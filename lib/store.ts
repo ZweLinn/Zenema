@@ -14,6 +14,7 @@ import { creditsImageApiSlice } from "./features/credits/creditsImageApiSlice";
 import { serieDetailApiSlice } from "./features/serieDetail/serieDetailApiSlice";
 import { serieVideoApiSlice } from "./features/video/serieVideoApiSlice";
 import { popularMovieApiSlice } from "./features/movie/popularMovieApiSlice";
+import { tvListApiSlice } from "./features/tv/tvListApiSlice";
 // `combineSlices` automatically combines the reducers using
 // their `reducerPath`s, therefore we no longer need to call `combineReducers`.
 const rootReducer = combineSlices(
@@ -31,6 +32,7 @@ const rootReducer = combineSlices(
     creditsSeriesApiSlice,
     creditsImageApiSlice,
     serieDetailApiSlice,
+    tvListApiSlice,
 );
 // Infer the `RootState` type from the root reducer
 export type RootState = ReturnType<typeof rootReducer>;
@@ -59,7 +61,8 @@ export const makeStore = () => {
                 .concat(creditsMovieApiSlice.middleware)
                 .concat(creditsSeriesApiSlice.middleware)
                 .concat(creditsImageApiSlice.middleware)
-                .concat(serieDetailApiSlice.middleware);
+                .concat(serieDetailApiSlice.middleware)
+                .concat(tvListApiSlice.middleware);
         },
     });
 };
