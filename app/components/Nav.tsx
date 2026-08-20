@@ -21,9 +21,9 @@ const NAV_LINKS = [
 		id: "tv-shows",
 		label: "TV Shows",
 		children: [
-			{ id: "tv-top-rated", href: "#", label: "Top Rated" },
-			{ id: "tv-on-air", href: "#", label: "On Air" },
-			{ id: "tv-popular", href: "#", label: "Popular" },
+			{ id: "tv-top-rated", href: "/tv/topRated", label: "Top Rated" },
+			{ id: "tv-on-air", href: "/tv/onAir", label: "On Air" },
+			{ id: "tv-popular", href: "/tv/popular", label: "Popular" },
 		],
 	},
 	{
